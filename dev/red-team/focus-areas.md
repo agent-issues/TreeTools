@@ -11,6 +11,8 @@ Discussions (one category per area); findings live as issues labelled
 `area:N` labels are per row. **Adding a row means creating its label**, or
 filing against it fails.
 
+Area 13 audits the rotation itself rather than the package.
+
 TreeTools is the foundation of the stack: PlotTools, TreeDist, TreeSearch,
 Quartet and Rogue consume its exported R functions, and several link against
 `inst/include/TreeTools/*.h` directly. A defect here has the widest blast
@@ -30,6 +32,8 @@ radius of anywhere in the stack — weight severity accordingly.
 | 10 | **Tree shape and balance** | `R/tree_shape.R`, `R/RUtreebalance.R`, `R/TotalCopheneticIndex.R`, `R/Cherries.R`, `R/Stemwardness.R`, `src/{tree_shape,n_cherries}.cpp` | Third-party-derived code (RUtreebalance) — does it share this package's input conventions? Behaviour on polytomies and on unrooted input. Balance index definitions against their published sources. |
 | 11 | **Rearrangement, paths and distances** | `R/tree_rearrangement.R` (19 kB), `R/PathLengths.R`, `R/mst.R`, `R/Decompose.R`, `src/{path_lengths,descendant_edges,minimum_spanning_tree}.cpp` | `CollapseNode()` performance (#113). `MatchNodes()` optimisation (#161). Merging `AllDescendantEdges()` into `DescendantEdges()` (#31). Do path-length routines handle missing or negative edge lengths? |
 | 12 | **Display, support and annotation** | `R/RoguePlot.R`, `R/Support.R`, `R/PaintTree.R`, `R/tree_display.R`, `R/sort.R`, `R/MatchNodes.R` | Node/edge index alignment between a tree and its plot — an off-by-one here mislabels support values silently. Snapshot tests exist (`_snaps/`); do they pin behaviour or just pixels? |
+
+| 13 | **Red-team process meta-review** | `dev/red-team/focus-areas.md`, `dev/next-issue/config.md`, `.github/workflows/sync-upstream.yml`, `AGENTS.md`, the issue and Discussion record itself | Is the rotation finding defects or performing diligence? Per-area yield: which areas have produced nothing across several rounds, and should they be merged, retired or re-scoped? Are `sev:*` labels calibrated, or has everything drifted to `sev:med`? Are issues actually closing via `Fixes #N` on merge into `agent`, or accumulating as stale `in-progress`? Is `sync-upstream.yml` still running, or silently disabled by the 60-day inactivity rule? Are findings being re-hunted because an earlier round's reopening condition was never recorded? This area audits the apparatus, not the package. |
 
 ## Not an area
 
