@@ -53,29 +53,21 @@ their issues separately.
 
 ## Branches
 
-```
-ms609/TreeTools main          ← maintainer commits here directly
-        │  (sync-upstream.yml, daily + manual)
-        ▼
-agent-issues/TreeTools main   ← read-only mirror of upstream. Never commit here
-        │  (same workflow merges it in)
-        ▼
-agent-issues/TreeTools agent  ← DEFAULT branch; agent work lands here by PR
-        ▲
-   feature/<name>             ← one per issue batch, from origin/agent
-```
+Work happens on the fork's **`main`**, the default branch. `Fixes #N` closes an
+issue on merge into it.
 
-- **`Fixes #N` closes an issue only on merge into `agent`.** Always open PRs
-  with `--base agent`.
-- Agents never push to `agent` directly. Everything, including documentation,
-  lands by reviewed PR.
-- The fork's `main` is protected against force-push and deletion. The sync
-  fails loudly if anything has been committed to it.
+- Agents never push to `main` directly. Everything, including documentation,
+  lands by reviewed PR from a `feature/<name>` branch.
+- The maintainer keeps committing to `ms609/TreeTools` `main`.
+  `sync-upstream.yml` (daily, or started manually) merges those commits into
+  the fork's `main`.
 - **If an open `chore` issue titled "Resolve upstream sync conflict" exists,
   resolve it before anything else.** It lists the conflicted paths. `DESCRIPTION`
   and `NEWS.md` conflict routinely; keep both sides.
 - Scheduled workflows stop after 60 days without repo activity. If the last
   sync run is old, start it manually from the Actions tab.
+- In GitHub's **Sync fork** menu, never choose *Discard commits*. It deletes
+  the fork's agent work.
 
 ## Local checkout
 
@@ -94,7 +86,7 @@ Work in worktrees under `../worktrees/`, never by switching branches in the
 main clone:
 
 ```bash
-git worktree add ../worktrees/TT-<name> -b feature/<name> origin/agent
+git worktree add ../worktrees/TT-<name> -b feature/<name> origin/main
 ```
 
 **Never `git stash`.** The stash is shared across worktrees and can drop
@@ -113,7 +105,7 @@ git -c user.name="ms609-agent" -c user.email="313734811+ms609-agent@users.norepl
 MSG
 
 # Issues, PRs, comments, labels
-GH_TOKEN=$CLAUDE_GH_TOKEN gh pr create --base agent --head feature/<name> --reviewer ms609 --body-file <file>
+GH_TOKEN=$CLAUDE_GH_TOKEN gh pr create --base main --head feature/<name> --reviewer ms609 --body-file <file>
 ```
 
 Never `export GH_TOKEN`. If `$CLAUDE_GH_TOKEN` is unset, **stop and say so**
@@ -139,8 +131,7 @@ Run these **from the checkout or worktree**. The scripts find the target repo
 from `gh repo set-default`.
 
 `R-CMD-check.yml` doesn't run for PRs that only change `AGENT*`, `*.md`,
-`*.yml` or `*.json` files, and its `push` trigger covers only `main`. So
-merging into `agent` doesn't run CI. Dispatch manually when you need a check.
+`*.yml` or `*.json` files. Dispatch manually when you need a check.
 
 ### Local builds (targeted iteration only)
 
