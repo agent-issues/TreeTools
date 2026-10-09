@@ -5,7 +5,7 @@ here; the doctrine is in the skill.
 
 | Key | Value |
 |-----|-------|
-| `base_branch` | **`agent`**, not `main` — the integration branch and the fork's default, on `origin` = `agent-issues/TreeTools`. The fork's `main` is a read-only mirror of upstream, advanced only by the sync workflow. **Never `upstream` (`ms609/TreeTools`)**: its push URL is `no-push-use-gha`. |
+| `base_branch` | **`main`**, on `origin` = `agent-issues/TreeTools`. Upstream commits arrive by `sync-upstream.yml`. **Never `upstream` (`ms609/TreeTools`)**: its push URL is `no-push-use-gha`. |
 | `grouping` | `labels`, prefix `area:` (1–13). Fall back to `hot_files` for an unlabelled issue. |
 | `exclude_label` | `deferred` (not now) and `needs-decision` (blocked on a maintainer call). |
 | `identity` | `agent` — `ms609-agent`, token env var `CLAUDE_GH_TOKEN`. |
@@ -32,10 +32,10 @@ Resolve at merge time; do not serialise work to avoid it.
 ## `pr_command`
 
 ```bash
-GH_TOKEN=$CLAUDE_GH_TOKEN gh pr create --base agent --head <branch> --reviewer ms609 --body-file <file>
+GH_TOKEN=$CLAUDE_GH_TOKEN gh pr create --base main --head <branch> --reviewer ms609 --body-file <file>
 ```
 
-`--base agent` is not optional — the fork's default branch governs whether
+`--base main` is not optional — the fork's default branch governs whether
 `Fixes #N` closes on merge. Reads need no token prefix. Never `export GH_TOKEN`.
 
 ## `build` / `test`
