@@ -6,7 +6,7 @@ here; the doctrine is in the skill.
 | Key | Value |
 |-----|-------|
 | `base_branch` | **`agent`**, not `main` — the integration branch and the fork's default, on `origin` = `agent-issues/TreeTools`. The fork's `main` is a read-only mirror of upstream, advanced only by the sync workflow. **Never `upstream` (`ms609/TreeTools`)**: its push URL is `no-push-use-gha`. |
-| `grouping` | `labels`, prefix `area:` (1–12). Fall back to `hot_files` for an unlabelled issue. |
+| `grouping` | `labels`, prefix `area:` (1–13). Fall back to `hot_files` for an unlabelled issue. |
 | `exclude_label` | `deferred` (not now) and `needs-decision` (blocked on a maintainer call). |
 | `identity` | `agent` — `ms609-agent`, token env var `CLAUDE_GH_TOKEN`. |
 
