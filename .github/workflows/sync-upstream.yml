@@ -1,0 +1,90 @@
+name: Sync from upstream
+
+# Propagates human commits on ms609/TreeTools main into this fork.
+#   1. fast-forward this fork's `main` from upstream  — cannot conflict
+#   2. merge `main` into `agent`                      — the only conflict point
+# On conflict the merge is left for an agent: an issue is filed listing the
+# conflicted paths, and resolving it is the first task of the next session.
+#
+# NOTE: scheduled workflows are disabled after 60 days of repository
+# inactivity. Re-arm with a manual `workflow_dispatch` run.
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent
+          fetch-depth: 0
+
+      - name: Identify as the agent account
+        run: |
+          git config user.name  "ms609-agent"
+          git config user.email "313734811+ms609-agent@users.noreply.github.com"
+
+      - name: Fast-forward main from upstream
+        run: |
+          git remote add upstream https://github.com/ms609/TreeTools.git
+          git fetch upstream main
+          # Fails loudly if fork main has diverged: it never should, and a
+          # divergence means someone committed to the mirror branch.
+          git push origin refs/remotes/upstream/main:refs/heads/main
+
+      - name: Merge upstream into agent
+        id: merge
+        run: |
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Nothing to merge."
+            echo "state=uptodate" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if git merge --no-edit upstream/main; then
+            git push origin agent
+            echo "state=merged" >> "$GITHUB_OUTPUT"
+          else
+            git diff --name-only --diff-filter=U > /tmp/conflicts.txt
+            git merge --abort
+            echo "state=conflict" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: File a conflict issue
+        if: steps.merge.outputs.state == 'conflict'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="Resolve upstream sync conflict into \`agent\`"
+          if gh issue list --state open --search "$TITLE in:title" --json number --jq 'length' | grep -qv '^0$'; then
+            echo "An open sync-conflict issue already exists; not filing a duplicate."
+            exit 0
+          fi
+          {
+            echo "\`upstream/main\` ($(git rev-parse --short upstream/main)) does not merge cleanly into \`agent\`."
+            echo
+            echo "Conflicted paths:"
+            echo
+            sed 's/^/- `/; s/$/`/' /tmp/conflicts.txt
+            echo
+            echo "Resolve in a worktree off \`agent\`, then open a PR with \`--base agent\`:"
+            echo
+            echo '```bash'
+            echo 'git worktree add ../worktrees/TT-sync -b chore/sync-upstream origin/agent'
+            echo 'cd ../worktrees/TT-sync && git fetch upstream main && git merge upstream/main'
+            echo '```'
+            echo
+            echo "\`DESCRIPTION\` and \`NEWS.md\` conflict routinely — take both sides."
+          } > /tmp/body.md
+          gh issue create --title "$TITLE" --body-file /tmp/body.md --label chore
