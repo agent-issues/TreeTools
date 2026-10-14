@@ -27,11 +27,11 @@
 
 ### C++ API
 
-- New header `TreeTools/edge_to_splits.h` exposes `tips_below()`, the
-  allocation-free edge-to-split pass behind
-  [`as.Splits()`](https://ms609.github.io/TreeTools/dev/reference/Splits.md),
-  and `topology_hash()`, a fingerprint of an unrooted topology that
-  ignores root position, edge order and node numbering.
+- Avoid crash in `SplitList.h` on CPUs that lack x86 POPCNT instruction
+  ([\#287](https://github.com/ms609/TreeTools/issues/287),
+  [@kevinushey](https://github.com/kevinushey)).
+- New header `TreeTools/edge_to_splits.h` exposes `tips_below()` and
+  `topology_hash()`.
 - [`as.Splits.phylo()`](https://ms609.github.io/TreeTools/dev/reference/Splits.md)
   is marginally faster on large trees.
 

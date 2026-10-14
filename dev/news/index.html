@@ -60,7 +60,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="c-api-2-4-1-9000">C++ API<a class="anchor" aria-label="anchor" href="#c-api-2-4-1-9000"></a></h3>
-<ul><li>New header <code>TreeTools/edge_to_splits.h</code> exposes <code>tips_below()</code>, the allocation-free edge-to-split pass behind <code><a href="../reference/Splits.html">as.Splits()</a></code>, and <code>topology_hash()</code>, a fingerprint of an unrooted topology that ignores root position, edge order and node numbering.</li>
+<ul><li>Avoid crash in <code>SplitList.h</code> on CPUs that lack x86 POPCNT instruction (<a href="https://github.com/ms609/TreeTools/issues/287" class="external-link">#287</a>, <a href="https://github.com/kevinushey" class="external-link">@kevinushey</a>).</li>
+<li>New header <code>TreeTools/edge_to_splits.h</code> exposes <code>tips_below()</code> and <code>topology_hash()</code>.</li>
 <li>
 <code><a href="../reference/Splits.html">as.Splits.phylo()</a></code> is marginally faster on large trees.</li>
 </ul></div>
