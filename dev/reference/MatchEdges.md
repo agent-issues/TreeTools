@@ -31,11 +31,33 @@ MatchNodes(x, table, nomatch = NA_integer_, tips = FALSE)
   Logical specifying whether to return matches for tips; unless `TRUE`,
   only the matches for internal nodes will be returned.
 
+## Value
+
+`MatchNodes()` returns an integer vector giving, for each internal node
+of `x` (and, if `tips = TRUE`, each tip, listed first), the number of
+the node in `table` that subtends the same clade, or `nomatch` if no
+node corresponds. `MatchEdges()` returns an integer vector giving, for
+each edge of `x`, the index of the edge in `table` that subtends the
+same clade, or `nomatch`. Where several nodes or edges of `table` denote
+the same clade (because of nodes with a single child), the first is
+returned.
+
 ## Details
 
-The current implementation is potentially inefficient. Please contact
-the maintainer to request a more efficient implementation if this
-function is proving a bottleneck.
+Clades are compared using the cluster table of Day (1985) , which takes
+time linear in the number of tips. Tips are matched by label;
+`MatchEdges()` matches tips by number if neither tree has tip labels.
+
+`MatchNodes()` treats clades as identical only if they contain exactly
+the same tips, so a node of `x` that subtends a tip absent from `table`
+has no match. `MatchEdges()` disregards tips of `table` that are absent
+from `x`.
+
+## References
+
+Day WHE (1985). “Optimal algorithms for comparing trees with labeled
+leaves.” *Journal of Classification*, **2**(1), 7–28.
+[doi:10.1007/BF01908061](https://doi.org/10.1007/BF01908061) .
 
 ## See also
 

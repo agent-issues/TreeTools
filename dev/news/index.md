@@ -2,6 +2,29 @@
 
 ## TreeTools 2.4.1.9000 (development)
 
+### Bug fixes
+
+- [`Preorder()`](https://ms609.github.io/TreeTools/dev/reference/Reorder.md),
+  [`Postorder()`](https://ms609.github.io/TreeTools/dev/reference/Reorder.md)
+  and
+  [`TntOrder()`](https://ms609.github.io/TreeTools/dev/reference/Reorder.md)
+  now keep each node label with its node. Previously, labels were
+  attached to the wrong nodes whenever the input tree’s internal nodes
+  were not already numbered in preorder.
+- [`MatchEdges()`](https://ms609.github.io/TreeTools/dev/reference/MatchEdges.md)
+  now respects `nomatch`.
+
+### Performance
+
+- [`MatchNodes()`](https://ms609.github.io/TreeTools/dev/reference/MatchEdges.md)
+  and
+  [`MatchEdges()`](https://ms609.github.io/TreeTools/dev/reference/MatchEdges.md)
+  run in linear time, using a cluster table in place of a tip-by-edge
+  matrix ([\#161](https://github.com/ms609/TreeTools/issues/161)).
+  [`Preorder()`](https://ms609.github.io/TreeTools/dev/reference/Reorder.md)
+  on trees with node labels is correspondingly faster: around 100 times
+  on 45-tip trees, with larger gains on larger trees.
+
 ### C++ API
 
 - New header `TreeTools/edge_to_splits.h` exposes `tips_below()`, the

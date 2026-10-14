@@ -47,6 +47,18 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.4.1.9000" id="treetools-2419000-development">TreeTools 2.4.1.9000 (development)<a class="anchor" aria-label="anchor" href="#treetools-2419000-development"></a></h2>
 <div class="section level3">
+<h3 id="bug-fixes-2-4-1-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-4-1-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/Reorder.html">Preorder()</a></code>, <code><a href="../reference/Reorder.html">Postorder()</a></code> and <code><a href="../reference/Reorder.html">TntOrder()</a></code> now keep each node label with its node. Previously, labels were attached to the wrong nodes whenever the input tree’s internal nodes were not already numbered in preorder.</li>
+<li>
+<code><a href="../reference/MatchEdges.html">MatchEdges()</a></code> now respects <code>nomatch</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="performance-2-4-1-9000">Performance<a class="anchor" aria-label="anchor" href="#performance-2-4-1-9000"></a></h3>
+<ul><li>
+<code><a href="../reference/MatchEdges.html">MatchNodes()</a></code> and <code><a href="../reference/MatchEdges.html">MatchEdges()</a></code> run in linear time, using a cluster table in place of a tip-by-edge matrix (<a href="https://github.com/ms609/TreeTools/issues/161" class="external-link">#161</a>). <code><a href="../reference/Reorder.html">Preorder()</a></code> on trees with node labels is correspondingly faster: around 100 times on 45-tip trees, with larger gains on larger trees.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="c-api-2-4-1-9000">C++ API<a class="anchor" aria-label="anchor" href="#c-api-2-4-1-9000"></a></h3>
 <ul><li>New header <code>TreeTools/edge_to_splits.h</code> exposes <code>tips_below()</code>, the allocation-free edge-to-split pass behind <code><a href="../reference/Splits.html">as.Splits()</a></code>, and <code>topology_hash()</code>, a fingerprint of an unrooted topology that ignores root position, edge order and node numbering.</li>
 <li>

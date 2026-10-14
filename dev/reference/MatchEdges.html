@@ -82,10 +82,36 @@ unless <code>TRUE</code>, only the matches for internal nodes will be returned.<
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p><code>MatchNodes()</code> returns an integer vector giving, for each internal
+node of <code>x</code> (and, if <code>tips = TRUE</code>, each tip, listed first), the number of
+the node in <code>table</code> that subtends the same clade, or <code>nomatch</code> if no node
+corresponds.
+<code>MatchEdges()</code> returns an integer vector giving, for each edge of <code>x</code>,
+the index of the edge in <code>table</code> that subtends the same clade, or <code>nomatch</code>.
+Where several nodes or edges of <code>table</code> denote the same clade (because of
+nodes with a single child), the first is returned.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The current implementation is potentially inefficient.
-Please contact the maintainer to request a more efficient implementation if
-this function is proving a bottleneck.</p>
+    <p>Clades are compared using the cluster table of
+Day (1985)
+, which takes time linear in the
+number of tips.
+Tips are matched by label; <code>MatchEdges()</code> matches tips by number if
+neither tree has tip labels.</p>
+<p><code>MatchNodes()</code> treats clades as identical only if they contain exactly the
+same tips, so a node of <code>x</code> that subtends a tip absent from <code>table</code> has no
+match.
+<code>MatchEdges()</code> disregards tips of <code>table</code> that are absent from <code>x</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Day WHE (1985).
+“Optimal algorithms for comparing trees with labeled leaves.”
+<em>Journal of Classification</em>, <b>2</b>(1), 7–28.
+<a href="https://doi.org/10.1007/BF01908061" class="external-link">doi:10.1007/BF01908061</a>
+.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
