@@ -100,9 +100,16 @@
 <li>The maintainer keeps committing to <code>ms609/TreeTools</code> <code>main</code>. <code>sync-upstream.yml</code> (daily, or started manually) merges those commits into the fork’s <code>main</code>.</li>
 <li>
 <strong>If an open <code>chore</code> issue titled “Resolve upstream sync conflict” exists, resolve it before anything else.</strong> It lists the conflicted paths. <code>DESCRIPTION</code> and <code>NEWS.md</code> conflict routinely; keep both sides.</li>
+<li>An open <code>chore</code> issue titled “Upstream sync failed” means the sync could not run or push (it lists the known causes). Tell the maintainer; it needs their GitHub settings, not a code change. The next successful run closes it.</li>
 <li>Scheduled workflows stop after 60 days without repo activity. If the last sync run is old, start it manually from the Actions tab.</li>
 <li>In GitHub’s <strong>Sync fork</strong> menu, never choose <em>Discard commits</em>. It deletes the fork’s agent work.</li>
+<li>Nothing is fork-only: agent files (this file, <code>dev/</code>, <code>sync-upstream.yml</code>) travel to <code>ms609/TreeTools</code> with everything else. Keep them out of the package build (<code>.Rbuildignore</code>) and guard fork-only jobs with <code>if: github.repository == 'agent-issues/TreeTools'</code>.</li>
 </ul></div>
+<div class="section level2">
+<h2 id="releasing-to-ms609treetools">Releasing to <code>ms609/TreeTools</code>
+<a class="anchor" aria-label="anchor" href="#releasing-to-ms609treetools"></a></h2>
+<p>The maintainer opens a PR on <code>ms609/TreeTools</code> with base <code>main</code> and head <code>agent-issues/TreeTools:main</code>. This PR is the final review point: edits (for example, trimming <code>NEWS.md</code>) are ordinary commits to the fork’s <code>main</code>, and the PR updates as they land. It is merged with <strong>Create a merge commit</strong> — never squash or rebase, which would break the shared history and the next sync. The next sync then fast-forwards the fork’s <code>main</code>. Agents do not open or merge this PR.</p>
+</div>
 <div class="section level2">
 <h2 id="local-checkout">Local checkout<a class="anchor" aria-label="anchor" href="#local-checkout"></a></h2>
 <p>Agent work uses its own clone, so the maintainer’s checkout is never touched:</p>
