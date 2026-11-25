@@ -235,9 +235,9 @@ namespace TreeTools {
       }
       
       // R stores the matrix column-major, so the eight bytes of each 64-bit
-      // bin lie n_splits apart. Reading through a raw pointer, with the
-      // eight loads of a full bin unrolled, avoids Rcpp's per-element
-      // indexing and is ~2.5x faster than the previous element-wise loop.
+      // bin lie n_splits apart. Read through a raw pointer, with the eight
+      // loads of a full bin unrolled; Rcpp's per-element indexing is ~3x
+      // slower.
       const std::size_t n = static_cast<std::size_t>(n_splits);
       const int32 full_bins = n_input_bins / input_bins_per_bin;
       
