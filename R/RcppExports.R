@@ -113,6 +113,10 @@ renumber_tips_to <- function(trees, target) {
     .Call(`_TreeTools_renumber_tips_to`, trees, target)
 }
 
+splitlist_contents <- function(x, raw_ptr) {
+    .Call(`_TreeTools_splitlist_contents`, x, raw_ptr)
+}
+
 cpp_edge_to_splits <- function(edge, order, nTip) {
     .Call(`_TreeTools_cpp_edge_to_splits`, edge, order, nTip)
 }

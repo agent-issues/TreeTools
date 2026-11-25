@@ -1,3 +1,12 @@
+# TreeTools 2.5.0.9000 (development) #
+
+## Performance
+
+- `SplitList` construction (`inst/include/TreeTools/SplitList.h`) is ~3x
+  faster for trees of 64+ leaves; downstream packages benefit on recompiling.
+  A new `SplitList(const Rbyte*, int32, int32)` constructor accepts a raw
+  pointer, signalled by `TREETOOLS_SPLITLIST_RAW_CTOR`.
+
 # TreeTools 2.5.0 (2026-10-16) #
 
 ## New features
